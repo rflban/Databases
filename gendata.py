@@ -28,26 +28,41 @@ def main():
 
 def genParlor(params, fake):
     for item in parlorGenerator(params.first, params.last, params.step, fake):
-        print(*item, sep = ', ')
+        if params.noid:
+            print(*(item[1:]), sep = ', ')
+        else:
+            print(*item, sep = ', ')
 
 
 def genMaster(params, fake):
     for item in masterGenerator(params.first, params.last, params.step, fake, params.pfirst, params.plast):
-        print(*item, sep = ', ')
+        if params.noid:
+            print(*(item[1:]), sep = ', ')
+        else:
+            print(*item, sep = ', ')
 
 
 def genClient(params, fake):
     for item in clientGenerator(params.first, params.last, params.step, fake):
-        print(*item, sep = ', ')
+        if params.noid:
+            print(*(item[1:]), sep = ', ')
+        else:
+            print(*item, sep = ', ')
 
 
 def genTattoo(params, fake):
     for item in tattooGenerator(params.first, params.last, params.step, fake, params.mfirst, params.mlast, params.cfirst, params.clast):
-        print(*item, sep = ', ')
+        if params.noid:
+            print(*(item[1:]), sep = ', ')
+        else:
+            print(*item, sep = ', ')
 
 
 def createArgParser():
     parser = argparse.ArgumentParser()
+
+    parser.add_argument('-ni', '--noid', action = 'store_true', default = False)
+
     subparsers = parser.add_subparsers(dest = 'command')
 
     parlorParser = subparsers.add_parser('parlor')
@@ -76,8 +91,8 @@ def decorateMasterParser(masterParser):
     masterParser.add_argument('last', type = int, default = None, nargs = '?')
     masterParser.add_argument('step', type = int, default = 1, nargs = '?')
 
-    masterParser.add_argument('pfirst', type = int, default = 1, nargs = '?')
-    masterParser.add_argument('plast', type = int, default = None, nargs = '?')
+    masterParser.add_argument('-pf', '--pfirst', type = int, default = 1)
+    masterParser.add_argument('-pl', '--plast', type = int, default = None)
 
 
 def decorateClientParser(clientParser):
@@ -91,11 +106,11 @@ def decorateTattooParser(tattooParser):
     tattooParser.add_argument('last', type = int, default = None, nargs = '?')
     tattooParser.add_argument('step', type = int, default = 1, nargs = '?')
 
-    tattooParser.add_argument('mfirst', type = int, default = 1, nargs = '?')
-    tattooParser.add_argument('mlast', type = int, default = None, nargs = '?')
+    tattooParser.add_argument('-mf', '--mfirst', type = int, default = 1)
+    tattooParser.add_argument('-ml', '--mlast', type = int, default = None)
 
-    tattooParser.add_argument('cfirst', type = int, default = 1, nargs = '?')
-    tattooParser.add_argument('clast', type = int, default = None, nargs = '?')
+    tattooParser.add_argument('-cf', '--cfirst', type = int, default = 1)
+    tattooParser.add_argument('-cl', '--clast', type = int, default = None)
 
 
 def parlorGenerator(first, last = None, step = 1, fake = Faker()):
