@@ -1,10 +1,10 @@
-create database TatooParlors
+create database TattooParlors
 go
 
 select *
 from sys.databases
-where name = 'TatooParlors'
-use TatooParlors
+where name = 'TattooParlors'
+use TattooParlors
 go
 
 create table Parlor (
@@ -35,7 +35,7 @@ create table Client (
     phone       varchar(50)  NOT NULL
 );
 
-create table Tatoo (
+create table Tattoo (
     id          int         NOT NULL,
     name        varchar(50) NOT NULL,
     price       money       NOT NULL,
@@ -53,8 +53,8 @@ alter table Master add
 alter table Client add
     constraint PK_client            PRIMARY KEY (id)
 
-alter table Tatoo add
-    constraint PK_tatoo             PRIMARY KEY (id),
-    constraint FK_tatoo_master      FOREIGN KEY (master_id) REFERENCES Master(id),
-    constraint FK_tatoo_client      FOREIGN KEY (client_id) REFERENCES Client(id)
+alter table Tattoo add
+    constraint PK_tattoo             PRIMARY KEY (id),
+    constraint FK_tattoo_master      FOREIGN KEY (master_id) REFERENCES Master(id),
+    constraint FK_tattoo_client      FOREIGN KEY (client_id) REFERENCES Client(id)
 

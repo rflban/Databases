@@ -1,26 +1,101 @@
 #!/usr/bin/env python3
 
+import sys
+import argparse
+
 from random import randint
 from random import uniform
 from random import choice
 
 from faker import Faker
 
+
 def main():
+    parser = createArgParser()
+    namespace = parser.parse_args(sys.argv[1:])
+
     fake = Faker('ru_RU')
 
-    for item in parlorGenerator(5, fake = Faker('ru_RU')):
+    if namespace.command == 'parlor':
+        genParlor(namespace, fake)
+    elif namespace.command == 'master':
+        genMaster(namespace, fake)
+    elif namespace.command == 'client':
+        genClient(namespace, fake)
+    elif namespace.command == 'tattoo':
+        genTattoo(namespace, fake)
+
+
+def genParlor(params, fake):
+    for item in parlorGenerator(params.first, params.last, params.step, fake):
         print(*item, sep = ', ')
-    print()
-    for item in masterGenerator(5, fake = Faker('ru_RU')):
+
+
+def genMaster(params, fake):
+    for item in masterGenerator(params.first, params.last, params.step, fake, params.pfirst, params.plast):
         print(*item, sep = ', ')
-    print()
-    for item in clientGenerator(5, fake = Faker('ru_RU')):
+
+
+def genClient(params, fake):
+    for item in clientGenerator(params.first, params.last, params.step, fake):
         print(*item, sep = ', ')
-    print()
-    for item in tatooGenerator(5, fake = Faker('ru_RU'), mlast = 1000, clast = 100):
+
+
+def genTattoo(params, fake):
+    for item in tattooGenerator(params.first, params.last, params.step, fake, params.mfirst, params.mlast, params.cfirst, params.clast):
         print(*item, sep = ', ')
-    print()
+
+
+def createArgParser():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest = 'command')
+
+    parlorParser = subparsers.add_parser('parlor')
+    decorateParlorParser(parlorParser)
+
+    masterParser = subparsers.add_parser('master')
+    decorateMasterParser(masterParser)
+
+    clientParser = subparsers.add_parser('client')
+    decorateClientParser(clientParser)
+
+    tattooParser = subparsers.add_parser('tattoo')
+    decorateTattooParser(tattooParser)
+
+    return parser
+
+
+def decorateParlorParser(parlorParser):
+    parlorParser.add_argument('first', type = int, default = 1, nargs = '?')
+    parlorParser.add_argument('last', type = int, default = None, nargs = '?')
+    parlorParser.add_argument('step', type = int, default = 1, nargs = '?')
+
+
+def decorateMasterParser(masterParser):
+    masterParser.add_argument('first', type = int, default = 1, nargs = '?')
+    masterParser.add_argument('last', type = int, default = None, nargs = '?')
+    masterParser.add_argument('step', type = int, default = 1, nargs = '?')
+
+    masterParser.add_argument('pfirst', type = int, default = 1, nargs = '?')
+    masterParser.add_argument('plast', type = int, default = None, nargs = '?')
+
+
+def decorateClientParser(clientParser):
+    clientParser.add_argument('first', type = int, default = 1, nargs = '?')
+    clientParser.add_argument('last', type = int, default = None, nargs = '?')
+    clientParser.add_argument('step', type = int, default = 1, nargs = '?')
+
+
+def decorateTattooParser(tattooParser):
+    tattooParser.add_argument('first', type = int, default = 1, nargs = '?')
+    tattooParser.add_argument('last', type = int, default = None, nargs = '?')
+    tattooParser.add_argument('step', type = int, default = 1, nargs = '?')
+
+    tattooParser.add_argument('mfirst', type = int, default = 1, nargs = '?')
+    tattooParser.add_argument('mlast', type = int, default = None, nargs = '?')
+
+    tattooParser.add_argument('cfirst', type = int, default = 1, nargs = '?')
+    tattooParser.add_argument('clast', type = int, default = None, nargs = '?')
 
 
 def parlorGenerator(first, last = None, step = 1, fake = Faker()):
@@ -43,9 +118,12 @@ def parlorGenerator(first, last = None, step = 1, fake = Faker()):
         idx += step
 
 
-def masterGenerator(first, last = None, step = 1, fake = Faker(), pfirst = 1, plast = 1):
+def masterGenerator(first, last = None, step = 1, fake = Faker(), pfirst = 1, plast = None):
     if last == None:
         first, last, = 1, first
+
+    if plast == None:
+        pfirst, plast = 1, pfirst
 
     if not (hasattr(fake, 'middle_name')):
         fake.middle_name = lambda: ''
@@ -57,17 +135,17 @@ def masterGenerator(first, last = None, step = 1, fake = Faker(), pfirst = 1, pl
         sex = choice(['f', 'm'])
 
         if sex == 'f':
-            fname = fake.first_name_female()
-            mname = fake.middle_name_female()
-            lname = fake.last_name_female()
+            fname = '"' + fake.first_name_female() + '"'
+            mname = '"' + fake.middle_name_female() + '"'
+            lname = '"' + fake.last_name_female() + '"'
         else:
-            fname = fake.first_name_male()
-            mname = fake.middle_name_male()
-            lname = fake.last_name_male()
+            fname = '"' + fake.first_name_male() + '"'
+            mname = '"' + fake.middle_name_male() + '"'
+            lname = '"' + fake.last_name_male() + '"'
 
         score = randint(1, 5)
         experience  = randint(0, 25)
-        phone = fake.phone_number()
+        phone = '"' + fake.phone_number() + '"'
         parlor_id = randint(pfirst, plast)
 
         yield idx, fname, mname, lname, score, experience, phone, parlor_id
@@ -89,31 +167,36 @@ def clientGenerator(first, last = None, step = 1, fake = Faker()):
         sex = choice(['f', 'm'])
 
         if sex == 'f':
-            fname = fake.first_name_female()
-            mname = fake.middle_name_female()
-            lname = fake.last_name_female()
+            fname = '"' + fake.first_name_female() + '"'
+            mname = '"' + fake.middle_name_female() + '"'
+            lname = '"' + fake.last_name_female() + '"'
         else:
-            fname = fake.first_name_male()
-            mname = fake.middle_name_male()
-            lname = fake.last_name_male()
+            fname = '"' + fake.first_name_male() + '"'
+            mname = '"' + fake.middle_name_male() + '"'
+            lname = '"' + fake.last_name_male() + '"'
 
-        phone = fake.phone_number()
+        phone = '"' + fake.phone_number() + '"'
 
         yield idx, fname, mname, lname, phone
 
         idx += step
 
 
-def tatooGenerator(first, last = None, step = 1, fake = Faker(), mfirst = 1, mlast = 1, cfirst = 1, clast = 1):
+def tattooGenerator(first, last = None, step = 1, fake = Faker(), mfirst = 1, mlast = None, cfirst = 1, clast = None):
     if last == None:
         first, last = 1, first
+
+    if mlast == None:
+        mfirst, mlast = 1, mfirst
+    if clast == None:
+        cfirst, clast = 1, cfirst
 
     name_foo = [fake.first_name_female, fake.month_name, fake.city_name, fake.street_title, fake.color_name]
     price_bases = [500, 750, 1000, 1250, 1500]
 
     idx = first
     while idx <= last:
-        name = choice(name_foo)()
+        name = '"' + choice(name_foo)() + '"'
         cost = choice(price_bases) * randint(1, 20)
         master_id = randint(mfirst, mlast)
         client_id = randint(cfirst, clast)
