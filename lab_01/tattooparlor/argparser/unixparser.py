@@ -5,6 +5,9 @@ def createArgParser():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-ni', '--noid', action = 'store_true', default = False)
+    parser.add_argument('-ft', '--field_terminator', default = ', ')
+    parser.add_argument('-rt', '--row_terminator', default = '\n')
+    parser.add_argument('-l', '--locale', default = 'en_US')
 
     subparsers = parser.add_subparsers(dest = 'command')
 

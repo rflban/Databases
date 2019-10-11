@@ -17,10 +17,10 @@ def parlorGenerator(first, last = None, step = 1, fake = Faker()):
     while idx <= last:
         worktime = choice(worktimes)
 
-        address = '"' + fake.address() + '"'
-        openTime = '"' + worktime[0] + '"'
-        endTime = '"' + worktime[1] + '"'
-        phone = '"' + fake.phone_number() + '"'
+        address =fake.address()
+        openTime = worktime[0]
+        endTime = worktime[1]
+        phone = fake.phone_number()
 
         yield idx, address, openTime, endTime, phone
 
@@ -45,17 +45,17 @@ def masterGenerator(first, last = None, step = 1, \
         sex = choice(['f', 'm'])
 
         if sex == 'f':
-            fname = '"' + fake.first_name_female() + '"'
-            mname = '"' + fake.middle_name_female() + '"'
-            lname = '"' + fake.last_name_female() + '"'
+            fname = fake.first_name_female()
+            mname = fake.middle_name_female()
+            lname = fake.last_name_female()
         else:
-            fname = '"' + fake.first_name_male() + '"'
-            mname = '"' + fake.middle_name_male() + '"'
-            lname = '"' + fake.last_name_male() + '"'
+            fname = fake.first_name_male()
+            mname = fake.middle_name_male()
+            lname = fake.last_name_male()
 
         score = randint(1, 5)
         experience  = randint(0, 25)
-        phone = '"' + fake.phone_number() + '"'
+        phone = fake.phone_number()
         parlor_id = randint(pfirst, plast)
 
         yield idx, fname, mname, lname, score, experience, phone, parlor_id
@@ -77,15 +77,15 @@ def clientGenerator(first, last = None, step = 1, fake = Faker()):
         sex = choice(['f', 'm'])
 
         if sex == 'f':
-            fname = '"' + fake.first_name_female() + '"'
-            mname = '"' + fake.middle_name_female() + '"'
-            lname = '"' + fake.last_name_female() + '"'
+            fname = fake.first_name_female()
+            mname = fake.middle_name_female()
+            lname = fake.last_name_female()
         else:
-            fname = '"' + fake.first_name_male() + '"'
-            mname = '"' + fake.middle_name_male() + '"'
-            lname = '"' + fake.last_name_male() + '"'
+            fname = fake.first_name_male()
+            mname = fake.middle_name_male()
+            lname = fake.last_name_male()
 
-        phone = '"' + fake.phone_number() + '"'
+        phone = fake.phone_number()
 
         yield idx, fname, mname, lname, phone
 
@@ -102,13 +102,12 @@ def tattooGenerator(first, last = None, step = 1, fake = Faker(), \
     if clast == None:
         cfirst, clast = 1, cfirst
 
-    name_foo = [fake.first_name_female, fake.month_name, fake.city_name, \
-                fake.street_title, fake.color_name]
+    name_foo = [fake.first_name_female, fake.month_name, fake.color_name]
     price_bases = [500, 750, 1000, 1250, 1500]
 
     idx = first
     while idx <= last:
-        name = '"' + choice(name_foo)() + '"'
+        name = choice(name_foo)()
         cost = choice(price_bases) * randint(1, 20)
         master_id = randint(mfirst, mlast)
         client_id = randint(cfirst, clast)
