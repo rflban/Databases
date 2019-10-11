@@ -8,7 +8,7 @@ use TattooParlors
 go
 
 create table Parlor (
-    id          int          NOT NULL,
+    id          int          NOT NULL IDENTITY,
     address     varchar(125) NOT NULL,
     openTime    time(0)      NOT NULL,
     endTime     time(0)      NOT NULL,
@@ -17,18 +17,18 @@ create table Parlor (
 go
 
 create table Master (
-    id          int          NOT NULL,
+    id          int          NOT NULL IDENTITY,
     fname       varchar(50)  NOT NULL,
     mname       varchar(50),
     lname       varchar(50)  NOT NULL,
-    score       int          NOT NULL DEFAULT 0,
-    experience  int          NOT NULL DEFAULT 0,
+    score       int          NOT NULL DEFAULT 1     check (1 <= score and score <= 5),
+    experience  int          NOT NULL DEFAULT 0     check (0 <= experience),
     phone       varchar(50)  NOT NULL,
     parlor_id   int
 );
 
 create table Client (
-    id          int          NOT NULL,
+    id          int          NOT NULL IDENTITY,
     fname       varchar(50)  NOT NULL,
     mname       varchar(50),
     lname       varchar(50)  NOT NULL,
@@ -36,7 +36,7 @@ create table Client (
 );
 
 create table Tattoo (
-    id          int         NOT NULL,
+    id          int         NOT NULL IDENTITY,
     name        varchar(50) NOT NULL,
     price       money       NOT NULL,
     master_id   int         NOT NULL,
@@ -54,7 +54,7 @@ alter table Client add
     constraint PK_client            PRIMARY KEY (id)
 
 alter table Tattoo add
-    constraint PK_tattoo             PRIMARY KEY (id),
-    constraint FK_tattoo_master      FOREIGN KEY (master_id) REFERENCES Master(id),
-    constraint FK_tattoo_client      FOREIGN KEY (client_id) REFERENCES Client(id)
+    constraint PK_tattoo            PRIMARY KEY (id),
+    constraint FK_tattoo_master     FOREIGN KEY (master_id) REFERENCES Master(id),
+    constraint FK_tattoo_client     FOREIGN KEY (client_id) REFERENCES Client(id)
 
