@@ -13,42 +13,25 @@ def main():
     fake = Faker('ru_RU')
 
     if namespace.command == 'parlor':
-        genParlor(namespace, fake)
+        generate(parlorGenerator, namespace.noid, namespace.first, \
+                 namespace.last, namespace.step, fake)
     elif namespace.command == 'master':
-        genMaster(namespace, fake)
+        generate(masterGenerator, namespace.noid, namespace.first, \
+                 namespace.last, namespace.step, fake, \
+                 namespace.pfirst, namespace.plast)
     elif namespace.command == 'client':
-        genClient(namespace, fake)
+        generate(clientGenerator, namespace.noid, namespace.first, \
+                 namespace.last, namespace.step, fake)
     elif namespace.command == 'tattoo':
-        genTattoo(namespace, fake)
+        generate(tattooGenerator, namespace.noid, namespace.first, \
+                 namespace.last, namespace.step, fake, \
+                 namespace.mfirst, namespace.mlast, \
+                 namespace.cfirst, namespace.clast)
 
 
-def genParlor(params, fake):
-    for item in parlorGenerator(params.first, params.last, params.step, fake):
-        if params.noid:
-            print(*(item[1:]), sep = ', ')
-        else:
-            print(*item, sep = ', ')
-
-
-def genMaster(params, fake):
-    for item in masterGenerator(params.first, params.last, params.step, fake, params.pfirst, params.plast):
-        if params.noid:
-            print(*(item[1:]), sep = ', ')
-        else:
-            print(*item, sep = ', ')
-
-
-def genClient(params, fake):
-    for item in clientGenerator(params.first, params.last, params.step, fake):
-        if params.noid:
-            print(*(item[1:]), sep = ', ')
-        else:
-            print(*item, sep = ', ')
-
-
-def genTattoo(params, fake):
-    for item in tattooGenerator(params.first, params.last, params.step, fake, params.mfirst, params.mlast, params.cfirst, params.clast):
-        if params.noid:
+def generate(generator, noid, *args):
+    for item in generator(*args):
+        if noid:
             print(*(item[1:]), sep = ', ')
         else:
             print(*item, sep = ', ')

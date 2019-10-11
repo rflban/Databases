@@ -9,7 +9,9 @@ def parlorGenerator(first, last = None, step = 1, fake = Faker()):
     if last == None:
         first, last = 1, first
 
-    worktimes = [ ('08:00:00', '20:00:00'), ('08:30:00', '20:30:00'), ('09:00:00', '21:00:00') ]
+    worktimes = [('08:00:00', '20:00:00'), \
+                 ('08:30:00', '20:30:00'), \
+                 ('09:00:00', '21:00:00')]
 
     idx = first
     while idx <= last:
@@ -25,7 +27,8 @@ def parlorGenerator(first, last = None, step = 1, fake = Faker()):
         idx += step
 
 
-def masterGenerator(first, last = None, step = 1, fake = Faker(), pfirst = 1, plast = None):
+def masterGenerator(first, last = None, step = 1, \
+                    fake = Faker(), pfirst = 1, plast = None):
     if last == None:
         first, last, = 1, first
 
@@ -89,7 +92,8 @@ def clientGenerator(first, last = None, step = 1, fake = Faker()):
         idx += step
 
 
-def tattooGenerator(first, last = None, step = 1, fake = Faker(), mfirst = 1, mlast = None, cfirst = 1, clast = None):
+def tattooGenerator(first, last = None, step = 1, fake = Faker(), \
+                    mfirst = 1, mlast = None, cfirst = 1, clast = None):
     if last == None:
         first, last = 1, first
 
@@ -98,7 +102,8 @@ def tattooGenerator(first, last = None, step = 1, fake = Faker(), mfirst = 1, ml
     if clast == None:
         cfirst, clast = 1, cfirst
 
-    name_foo = [fake.first_name_female, fake.month_name, fake.city_name, fake.street_title, fake.color_name]
+    name_foo = [fake.first_name_female, fake.month_name, fake.city_name, \
+                fake.street_title, fake.color_name]
     price_bases = [500, 750, 1000, 1250, 1500]
 
     idx = first
@@ -111,3 +116,4 @@ def tattooGenerator(first, last = None, step = 1, fake = Faker(), mfirst = 1, ml
         yield idx, name, cost, master_id, client_id
 
         idx += step
+
