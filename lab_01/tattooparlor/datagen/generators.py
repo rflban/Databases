@@ -22,7 +22,7 @@ def parlorGenerator(first, last = None, step = 1, fake = Faker()):
         endTime = worktime[1]
         phone = fake.phone_number()
 
-        yield idx, address, openTime, endTime, phone
+        yield idx, address.replace('\n', ' '), openTime, endTime, phone
 
         idx += step
 
