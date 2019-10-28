@@ -136,3 +136,66 @@ where id in (
     )
 );
 
+-- #14
+-- Мастера и средняя стоимость их работы
+select master.id, cast(avg(cast(tattoo.price as numeric)) as money)
+from master join tattoo
+     on master.id = tattoo.master_id
+group by master.id;
+
+-- #15
+-- Мастера с высшим рейтингом и средняя стоимость их работы
+select master.id, cast(avg(cast(tattoo.price as numeric)) as money)
+from master join tattoo
+     on master.id = tattoo.master_id
+group by master.id
+having score = 5;
+
+-- #22
+-- Средняя стоимость работы мастера
+with master_prices(master_id, avg_price) as (
+    select master.id, avg(cast(tattoo.price as numeric))
+    from master join tattoo
+         on master.id = tattoo.master_id
+    group by master.id
+)
+select cast(avg(avg_price) as money)
+from master_prices;
+
+-- #23
+-- Все мастера, но рекурсивно!
+with recursive master_rec (id, fname, phone) as (
+    select id, fname, phone
+    from master
+    where id = 1
+
+    union all
+
+    select master.id, master.fname, master.phone
+    from master join master_rec
+        on master.id = master_rec.id + 1
+)
+select * from master_rec;
+
+-- #24
+-- Мастера и средняя стоимость их работы
+select distinct master.id, cast(avg(cast(tattoo.price as numeric)) over(partition by master.id) as money) as avg_price
+from master join tattoo
+     on master.id = tattoo.master_id;
+
+
+-- #25
+-- Мастера и средняя стоимость их работы
+with data (id, avg_price, rep) as (
+    select id, avg_price, row_number() over(partition by id, avg_price order by id)
+    from (
+        select master.id,
+               cast(avg(cast(tattoo.price as numeric)) over(partition by master.id) as money) as avg_price
+        from master join tattoo
+             on master.id = tattoo.master_id
+    ) x
+)
+select id, avg_price
+from data
+where rep = 1;
+
