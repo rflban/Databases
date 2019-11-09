@@ -117,3 +117,11 @@ filter_crossed (id, var1, var2, fd, td) as (
 )
 select * from filter_crossed;
 
+with
+ver_join (id, var1, var2, fd, td) as (
+    select t1.id, var1, var2, greatest(t1.fd, t2.fd), least(t1.td, t2.td)
+    from table1 as t1 join table2 as t2 using (id)
+)
+select * from ver_join
+where fd < td;
+
