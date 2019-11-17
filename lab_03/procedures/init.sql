@@ -48,6 +48,7 @@ $$
             exit when not found;
         end loop;
         close client_cursor;
+        deallocate client_cursor;
     end
 $$
 language plpgsql;
