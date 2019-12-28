@@ -1,0 +1,39 @@
+{
+    "type" : "object",
+
+    "properties" : {
+        "id"         : {
+            "type" : "integer"
+        },
+        "fname"      : {
+            "type" : "string"
+        },
+        "mname"      : {
+            "type" : "string"
+        },
+        "lname"      : {
+            "type" : "string"
+        },
+        "score"      : {
+            "type" : "integer"
+        },
+        "experience" : {
+            "type" : "integer"
+        },
+        "phone"      : {
+            "type" : "string"
+        },
+        "parlor_id"  : {
+            "type" : "integer"
+        }
+    },
+
+    "required" : [
+        "fname",
+        "lname",
+        "score",
+        "experience",
+        "phone"
+    ]
+}
+
